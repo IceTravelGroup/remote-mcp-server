@@ -133,7 +133,7 @@ console.error("API_COOKIE length:", cookie.length);
 					hotels?: AccommodationResult[];
 				} = await res.json();
 
-				console.log("🌈API resp", json);
+				console.log("🌈API resp", JSON.stringify(json, null, 2));
 
 				const destinations = json.destinations ?? [];
 				const hotels = json.hotels ?? [];
