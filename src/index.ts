@@ -2,6 +2,10 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { McpAgent } from "agents/mcp";
 import { z } from "zod";
 
+function getApiCookie(env?: Env) {
+	return env?.API_COOKIE || process.env.API_COOKIE || "";
+}
+
 function isInDestination(item: any, destinationId: string): boolean {
   const codes = (item.sgh_codes ?? '').split('-')
   return codes.includes(destinationId)
@@ -35,6 +39,12 @@ export class MyMCP extends McpAgent {
 			"destination_info_search",
 			{ inputSchema: { query: z.string() } },
 			async ({ query }) => {
+
+const cookie = getApiCookie(this.env);
+
+console.error("API_COOKIE exists:", !!cookie);
+console.error("API_COOKIE length:", cookie.length);
+
 				const url = new URL(
 					"https://api.icelolly.com/universal-autocomplete/v1/suggest"
 				);
@@ -51,7 +61,7 @@ export class MyMCP extends McpAgent {
 						headers: {
 							"User-Agent": "destinations-mcp/1.0",
 							Accept: "application/json",
-							cookie: process.env.API_COOKIE ?? "",
+							cookie: cookie,
 						},
 					});
 
